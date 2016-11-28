@@ -6,12 +6,12 @@ use Core\Controller;
 use Helpers\Session;
 use Helpers\Url;
 
-class User extends Controller {	
+class User extends Controller { 
 
     private $users;
     private $roles;
 
-	public function __construct()
+    public function __construct()
     {
         parent::__construct();
         $this->users = new \App\Models\Users();
@@ -22,10 +22,10 @@ class User extends Controller {
         if(Session::get('admin') == null){
             Url::redirect('admin/login');
         }
-    	$data['title'] = 'User Management';
+        $data['title'] = 'User Management';
         $data['menu'] = 'user';
         $data['roles'] = $this->roles->getAll();
-    	View::renderTemplate('header', $data);
+        View::renderTemplate('header', $data);
         View::render('User/User', $data);
         View::renderTemplate('footer', $data);
     }
@@ -39,6 +39,7 @@ class User extends Controller {
         $password = $_POST['password'];
         $fullName = $_POST['fullName'];
         $birthDate = $_POST['birthDate'];
+        $studentCard = $_POST['studentCard'];
         $email = $_POST['email'];
         $role = $_POST['role'];
         $upload = new \Helpers\UploadCoded();
@@ -47,9 +48,9 @@ class User extends Controller {
         $fileName = $_FILES['avatar']['name'];
 
         if("" === $fileName){
-            $data = array('username' => $username, 'password' => md5($password) ,'fullname' => $fullName,'birth_date' => $birthDate,'email' => $email,'avatar' => 'http://localhost/ewsd2016/assets/images/default.png','role' => $role);
+            $data = array('username' => $username, 'password' => md5($password) ,'fullname' => $fullName,'birth_date' => $birthDate,'email' => $email,'avatar' => 'http://localhost/ewsd2016/assets/images/default.png','role' => $role ,'studentCard' => $studentCard);
         }else{
-            $data = array('username' => $username, 'password' => md5($password) ,'fullname' => $fullName,'birth_date' => $birthDate,'email' => $email,'avatar' => $avatar ,'role' => $role );
+            $data = array('username' => $username, 'password' => md5($password) ,'fullname' => $fullName,'birth_date' => $birthDate,'email' => $email,'avatar' => $avatar ,'role' => $role,'studentCard' => $studentCard );
         }
         echo json_encode($this->users->add($data));
     }
@@ -76,15 +77,16 @@ class User extends Controller {
         $fullName = $_POST['fullName'];
         $birthDate = $_POST['birthDate'];
         $email = $_POST['email'];
+        $studentCard = $_POST['studentCard'];
         $upload = new \Helpers\UploadCoded();
         $avatar = $upload->upload('avatar','image');
         $birthDate = date('Y-m-d',strtotime($birthDate));
         $role = $_POST['role'];
         $fileName = $_FILES['avatar']['name'];
         if("" === $fileName){
-            $data = array('username' => $username,'fullname' => $fullName,'birth_date' => $birthDate,'email' => $email,'role' => $role);
+            $data = array('username' => $username,'fullname' => $fullName,'birth_date' => $birthDate,'email' => $email,'role' => $role ,'studentCard' => $studentCard);
         }else{
-            $data = array('username' => $username,'fullname' => $fullName,'birth_date' => $birthDate,'email' => $email,'avatar' => $avatar,'role' => $role );
+            $data = array('username' => $username,'fullname' => $fullName,'birth_date' => $birthDate,'email' => $email,'avatar' => $avatar,'role' => $role,'studentCard' => $studentCard );
         }
 
         $where = array('id' => $id);
